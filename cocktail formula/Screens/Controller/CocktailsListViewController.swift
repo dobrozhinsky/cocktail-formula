@@ -26,4 +26,8 @@ class CocktailsListViewController: UIViewController {
         cocktailTableView.reloadData()
     }
     
+    @IBAction func addCoctailTap(_ sender: Any) {
+    }
+    
+    
 }

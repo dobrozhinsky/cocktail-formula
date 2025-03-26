@@ -25,7 +25,13 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="3GK-Tn-lCh"/>
+                    <navigationItem key="navigationItem" id="3GK-Tn-lCh">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="ItB-vy-1nc">
+                            <connections>
+                                <action selector="addCoctailTap:" destination="BYZ-38-t0r" id="klW-3P-efQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="cocktailTableView" destination="4Fh-PA-Vwh" id="Do5-CK-O0U"/>
                     </connections>
