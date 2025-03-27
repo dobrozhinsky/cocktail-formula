@@ -8,6 +8,13 @@
 import UIKit
 
 class SelectedCocktailViewController: UIViewController {
+    
+    var cocktailName: String?
+    var cocktailImage: String?
+    var baseSpirits: String?
+    var strength: String?
+    var dietary: String?
+    var flavour: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()

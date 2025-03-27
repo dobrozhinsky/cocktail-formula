@@ -11,8 +11,17 @@ class CocktailsListViewController: UIViewController {
     
     @IBOutlet weak var cocktailTableView: UITableView!
     
-    private var coctails: [CocktailEntity] = []
+    private var cocktails: [CocktailEntity] = []
     private let manager = DatabaseManager()
+    
+    var selectedCocktailName: String?
+    var selectedCocktailImage: String?
+    var selectedBaseSpirits: String?
+    var selectedStrength: String?
+    var selectedDietary: String?
+    var selectedFlavour: String?
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +31,64 @@ class CocktailsListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        coctails = manager.fetchUsers()
+        cocktails = manager.fetchUsers()
         cocktailTableView.reloadData()
     }
     
     @IBAction func addCoctailTap(_ sender: Any) {
+        addUpdateCocktailNavigation()
+        
+        
     }
+    
+    func addUpdateCocktailNavigation(cocktail: CocktailEntity? = nil) {
+        
+        guard let newCocktailVC = self.storyboard?.instantiateViewController(withIdentifier: "NewCocktailViewController") as? NewCocktailViewController else { return }
+        newCocktailVC.cocktail = cocktail
+        navigationController?.pushViewController(newCocktailVC, animated: true)
+        
+    }
+
+}
+
+extension CocktailsListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        cocktails.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CocktailCell") as? CocktailCell else { return UITableViewCell() }
+        let cocktail = cocktails[indexPath.row]
+        cell.cocktail = cocktail
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCocktailName = cocktails[indexPath.row].cocktailName
+        selectedCocktailImage = cocktails[indexPath.row].cocktailImage
+        selectedBaseSpirits = cocktails[indexPath.row].baseSpirits
+        selectedStrength = cocktails[indexPath.row].strength
+        selectedFlavour = cocktails[indexPath.row].flavour
+        selectedDietary = cocktails[indexPath.row].dietary
+        self.performSegue(withIdentifier: "selectedCocktail", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "selectedCocktail"{
+            
+            if let selectedCocktailVC = segue.destination as? SelectedCocktailViewController {
+                selectedCocktailVC.cocktailName = selectedCocktailName
+                selectedCocktailVC.cocktailImage = selectedCocktailImage
+                selectedCocktailVC.baseSpirits = selectedBaseSpirits
+                selectedCocktailVC.strength = selectedStrength
+                selectedCocktailVC.flavour = selectedFlavour
+                selectedCocktailVC.dietary = selectedDietary
+            }
+            
+        }
+        
+    }
+    
     
     
 }
