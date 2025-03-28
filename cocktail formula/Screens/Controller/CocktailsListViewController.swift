@@ -52,6 +52,7 @@ class CocktailsListViewController: UIViewController {
 }
 
 extension CocktailsListViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         cocktails.count
     }
@@ -62,6 +63,12 @@ extension CocktailsListViewController: UITableViewDataSource {
         cell.cocktail = cocktail
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+        
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCocktailName = cocktails[indexPath.row].cocktailName
@@ -89,6 +96,23 @@ extension CocktailsListViewController: UITableViewDataSource {
         
     }
     
-    
-    
+}
+
+extension CocktailsListViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let update = UIContextualAction(style: .normal, title: "Update") { _, _, _ in
+            self.addUpdateCocktailNavigation(cocktail: self.cocktails[indexPath.row])
+        }
+        update.backgroundColor = .systemIndigo
+
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
+            self.manager.deleteCocktail(cocktailEntity: self.cocktails[indexPath.row])
+            self.cocktails.remove(at: indexPath.row)
+            self.cocktailTableView.reloadData()
+        }
+
+        return UISwipeActionsConfiguration(actions: [delete, update])
+    }
+
 }
